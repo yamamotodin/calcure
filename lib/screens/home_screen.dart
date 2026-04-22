@@ -237,6 +237,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 16),
+              const Text(
+                '© 2026 kujirabo.jp yamamotodin',
+                style: TextStyle(fontSize: 11, color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
             ],
           ),
         ),
