@@ -6,8 +6,6 @@ import '../models/quiz_problem.dart';
 import '../models/problem_result.dart';
 import 'result_screen.dart';
 
-const int _kQuestionsWithoutTimer = 10;
-
 enum _Feedback { none, correct, wrong }
 
 class QuizScreen extends StatefulWidget {
@@ -86,7 +84,7 @@ class _QuizScreenState extends State<QuizScreen> {
     Future.delayed(const Duration(milliseconds: 700), () {
       if (!mounted) return;
       final noTimer = widget.settings.timeLimit.seconds == null;
-      if (noTimer && _total >= _kQuestionsWithoutTimer) {
+      if (noTimer && _total >= widget.settings.questionCount) {
         _goToResult();
         return;
       }
@@ -195,7 +193,7 @@ class _QuizScreenState extends State<QuizScreen> {
                     _TimerBadge(seconds: _remainingSeconds!)
                   else
                     Text(
-                      '$_total / $_kQuestionsWithoutTimer',
+                      '$_total / ${widget.settings.questionCount}',
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.bold),
                     ),
@@ -210,7 +208,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 child: LinearProgressIndicator(
                   value: hasTimer
                       ? _remainingSeconds! / limitSeconds!
-                      : _total / _kQuestionsWithoutTimer,
+                      : _total / widget.settings.questionCount,
                   minHeight: 8,
                   backgroundColor: Colors.grey.shade200,
                   color: hasTimer

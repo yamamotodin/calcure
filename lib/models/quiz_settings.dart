@@ -84,10 +84,12 @@ class QuizSettings {
   final Set<Operation> operations;
   final Digits digits;
   final TimeLimitOption timeLimit;
+  final int questionCount;
 
   const QuizSettings({
     required this.operations,
     required this.digits,
     required this.timeLimit,
+    this.questionCount = 10,
   });
 }

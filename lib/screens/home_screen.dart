@@ -13,7 +13,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final Set<Operation> _selectedOps = {Operation.add};
   Digits _digits = Digits.one;
-  TimeLimitOption _timeLimit = TimeLimitOption.sixty;
+  TimeLimitOption _timeLimit = TimeLimitOption.unlimited;
+  int _questionCount = 10;
 
   void _toggleOperation(Operation op) {
     setState(() {
@@ -32,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
           operations: Set.from(_selectedOps),
           digits: _digits,
           timeLimit: _timeLimit,
+          questionCount: _questionCount,
         ),
       ),
     ));
@@ -163,6 +165,53 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: selected
                                 ? Colors.white
                                 : Colors.blue.shade400,
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(height: 14),
+              _SectionCard(
+                title: 'もんだいすう',
+                color: Colors.purple.shade50,
+                borderColor: Colors.purple.shade200,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [10, 20, 30, 40, 50].map((count) {
+                    final selected = _questionCount == count;
+                    return GestureDetector(
+                      onTap: () => setState(() => _questionCount = count),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 150),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: selected
+                              ? Colors.purple.shade400
+                              : Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                              color: Colors.purple.shade400, width: 2.5),
+                          boxShadow: selected
+                              ? [
+                                  BoxShadow(
+                                    color: Colors.purple.shade200,
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 4),
+                                  )
+                                ]
+                              : [],
+                        ),
+                        child: Text(
+                          '$countもん',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: selected
+                                ? Colors.white
+                                : Colors.purple.shade400,
                           ),
                         ),
                       ),
