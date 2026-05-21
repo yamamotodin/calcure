@@ -30,20 +30,22 @@ class QuizProblem {
   static QuizProblem generate(QuizSettings settings, Random random) {
     final operation = settings.operations
         .elementAt(random.nextInt(settings.operations.length));
-    final min = settings.digits.min;
-    final max = settings.digits.max;
+    final lMin = settings.leftDigits.min;
+    final lMax = settings.leftDigits.max;
+    final rMin = settings.rightDigits.min;
+    final rMax = settings.rightDigits.max;
 
     int left, right, answer;
 
     switch (operation) {
       case Operation.add:
-        left = _rand(random, min, max);
-        right = _rand(random, min, max);
+        left = _rand(random, lMin, lMax);
+        right = _rand(random, rMin, rMax);
         answer = left + right;
         break;
       case Operation.subtract:
-        left = _rand(random, min, max);
-        right = _rand(random, min, max);
+        left = _rand(random, lMin, lMax);
+        right = _rand(random, rMin, rMax);
         if (left < right) {
           final tmp = left;
           left = right;
@@ -52,15 +54,14 @@ class QuizProblem {
         answer = left - right;
         break;
       case Operation.multiply:
-        // 右辺は1〜9で固定（掛け算の桁が大きくなりすぎないように）
-        left = _rand(random, min, max);
-        right = _rand(random, 1, 9);
+        left = _rand(random, lMin, lMax);
+        right = _rand(random, rMin, rMax);
         answer = left * right;
         break;
       case Operation.divide:
         // 割り切れる問題のみ生成
-        right = _rand(random, 1, 9);
-        final maxAnswer = (max / right).floor().clamp(1, 999);
+        right = _rand(random, rMin, rMax);
+        final maxAnswer = (lMax / right).floor().clamp(1, 999);
         answer = _rand(random, 1, maxAnswer);
         left = right * answer;
         break;

@@ -10,7 +10,8 @@ class SessionResult {
   final int wrong;
   final int total;
   final Set<Operation> operations;
-  final Digits digits;
+  final Digits leftDigits;
+  final Digits rightDigits;
   final TimeLimitOption timeLimit;
   final List<ProblemResult> history;
 
@@ -21,7 +22,8 @@ class SessionResult {
     required this.wrong,
     required this.total,
     required this.operations,
-    required this.digits,
+    required this.leftDigits,
+    required this.rightDigits,
     required this.timeLimit,
     required this.history,
   });
@@ -42,7 +44,8 @@ class SessionResult {
       wrong: wrong,
       total: total,
       operations: settings.operations,
-      digits: settings.digits,
+      leftDigits: settings.leftDigits,
+      rightDigits: settings.rightDigits,
       timeLimit: settings.timeLimit,
       history: history,
     );
@@ -55,7 +58,8 @@ class SessionResult {
         'wrong': wrong,
         'total': total,
         'operations': operations.map((o) => o.index).toList(),
-        'digits': digits.index,
+        'leftDigits': leftDigits.index,
+        'rightDigits': rightDigits.index,
         'timeLimit': timeLimit.index,
         'history': history
             .map((r) => {
@@ -89,6 +93,9 @@ class SessionResult {
       );
     }).toList();
 
+    final legacyDigits = json.containsKey('digits')
+        ? Digits.values[json['digits'] as int]
+        : Digits.one;
     return SessionResult(
       id: json['id'] as String,
       startedAt: DateTime.parse(json['startedAt'] as String),
@@ -96,7 +103,12 @@ class SessionResult {
       wrong: json['wrong'] as int,
       total: json['total'] as int,
       operations: ops,
-      digits: Digits.values[json['digits'] as int],
+      leftDigits: json.containsKey('leftDigits')
+          ? Digits.values[json['leftDigits'] as int]
+          : legacyDigits,
+      rightDigits: json.containsKey('rightDigits')
+          ? Digits.values[json['rightDigits'] as int]
+          : legacyDigits,
       timeLimit: TimeLimitOption.values[json['timeLimit'] as int],
       history: history,
     );

@@ -12,7 +12,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final Set<Operation> _selectedOps = {Operation.add};
-  Digits _digits = Digits.one;
+  Digits _leftDigits = Digits.one;
+  Digits _rightDigits = Digits.one;
   TimeLimitOption _timeLimit = TimeLimitOption.unlimited;
   int _questionCount = 10;
 
@@ -31,7 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (_) => QuizScreen(
         settings: QuizSettings(
           operations: Set.from(_selectedOps),
-          digits: _digits,
+          leftDigits: _leftDigits,
+          rightDigits: _rightDigits,
           timeLimit: _timeLimit,
           questionCount: _questionCount,
         ),
@@ -130,46 +132,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 title: 'けたすう',
                 color: Colors.blue.shade50,
                 borderColor: Colors.blue.shade200,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: Digits.values.map((d) {
-                    final selected = _digits == d;
-                    return GestureDetector(
-                      onTap: () => setState(() => _digits = d),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 150),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 22, vertical: 12),
-                        decoration: BoxDecoration(
-                          color: selected
-                              ? Colors.blue.shade400
-                              : Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                              color: Colors.blue.shade400, width: 2.5),
-                          boxShadow: selected
-                              ? [
-                                  BoxShadow(
-                                    color: Colors.blue.shade200,
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 4),
-                                  )
-                                ]
-                              : [],
-                        ),
-                        child: Text(
-                          d.label,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: selected
-                                ? Colors.white
-                                : Colors.blue.shade400,
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
+                child: Column(
+                  children: [
+                    _DigitsRow(
+                      label: 'ひだり',
+                      selected: _leftDigits,
+                      onSelect: (d) => setState(() => _leftDigits = d),
+                    ),
+                    const SizedBox(height: 10),
+                    _DigitsRow(
+                      label: 'みぎ',
+                      selected: _rightDigits,
+                      onSelect: (d) => setState(() => _rightDigits = d),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 14),
@@ -296,6 +272,83 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _DigitsRow extends StatelessWidget {
+  final String label;
+  final Digits selected;
+  final ValueChanged<Digits> onSelect;
+
+  const _DigitsRow({
+    required this.label,
+    required this.selected,
+    required this.onSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 40,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue.shade700,
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Row(
+            children: Digits.values.map((d) {
+              final isSelected = selected == d;
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 6),
+                  child: GestureDetector(
+                    onTap: () => onSelect(d),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                        color: isSelected ? Colors.blue.shade400 : Colors.white,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                            color: Colors.blue.shade400, width: 2.5),
+                        boxShadow: isSelected
+                            ? [
+                                BoxShadow(
+                                  color: Colors.blue.shade200,
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                )
+                              ]
+                            : [],
+                      ),
+                      child: Text(
+                        d.label,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: isSelected
+                              ? Colors.white
+                              : Colors.blue.shade400,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
     );
   }
 }

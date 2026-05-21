@@ -82,13 +82,15 @@ extension TimeLimitExt on TimeLimitOption {
 
 class QuizSettings {
   final Set<Operation> operations;
-  final Digits digits;
+  final Digits leftDigits;
+  final Digits rightDigits;
   final TimeLimitOption timeLimit;
   final int questionCount;
 
   const QuizSettings({
     required this.operations,
-    required this.digits,
+    required this.leftDigits,
+    required this.rightDigits,
     required this.timeLimit,
     this.questionCount = 10,
   });

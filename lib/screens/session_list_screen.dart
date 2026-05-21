@@ -259,11 +259,14 @@ class _SettingChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ops = session.operations.map((o) => o.label).join('');
+    final digitsLabel = session.leftDigits == session.rightDigits
+        ? session.leftDigits.label
+        : 'ひだり${session.leftDigits.label}・みぎ${session.rightDigits.label}';
     return Wrap(
       spacing: 4,
       children: [
         _Chip(ops, Colors.orange.shade100, Colors.orange.shade700),
-        _Chip(session.digits.label, Colors.blue.shade100, Colors.blue.shade700),
+        _Chip(digitsLabel, Colors.blue.shade100, Colors.blue.shade700),
         _Chip(session.timeLimit.label, Colors.green.shade100,
             Colors.green.shade700),
       ],
